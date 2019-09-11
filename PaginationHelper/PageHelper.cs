@@ -81,53 +81,8 @@ namespace PaginationHelper
             return GetEnvelope(records, paginationDto.Page, paginationDto.PageSize.Value, numberOfRecords);
         }
 
-        #endregion
-
-        #region Private Methods
-
-        /// <summary>
-        /// Wraps data in an envelope
-        /// </summary>
-        /// <typeparam name="T">Type of data elements</typeparam>
-        /// <param name="records">current page's records</param>
-        /// <param name="page">Current page</param>
-        /// <param name="pageSize">Size of the page</param>
-        /// <param name="numberOfRecords">Total records count</param>
-        /// <returns>Envelope containing data</returns>
-        private Envelope<IEnumerable<T>> GetEnvelope<T>(List<T> records, int page, int pageSize, int numberOfRecords) where T : class
-        {
-            var numberOfPages = GetPagingCount(numberOfRecords, pageSize);
-            var pager = new Pager
-            {
-                NumberOfPages = numberOfPages,
-                CurrentPage = page,
-                TotalRecords = numberOfRecords,
-                PageSize = pageSize
-            };
-
-            var resultSet = new ResultSet<T>
-            {
-                Pager = pager,
-                Items = records
-            };
-
-            return new Envelope<IEnumerable<T>>
-            {
-                Data = resultSet.Items,
-                Meta = new Meta
-                {
-                    Links = GetPagination(resultSet.Pager),
-                    Count = resultSet.Items.Count()
-                }
-            };
-        }
-
-        /// <summary>
-        /// Returns a <see cref="Pagination"/> object
-        /// </summary>
-        /// <param name="pager">The pagination page stats data</param>
-        /// <returns>Pagination data</returns>
-        private Pagination GetPagination(Pager pager)
+        /// <inheritdoc />
+        public Pagination GetPagination(Pager pager)
         {
             var routeName = _urlHelper.ActionContext.ActionDescriptor.AttributeRouteInfo.Name;
             var routeValues = _urlHelper.ActionContext.ActionDescriptor.RouteValues;
@@ -173,6 +128,41 @@ namespace PaginationHelper
             }
 
             return pagination;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Wraps data in an envelope
+        /// </summary>
+        /// <typeparam name="T">Type of data elements</typeparam>
+        /// <param name="records">current page's records</param>
+        /// <param name="page">Current page</param>
+        /// <param name="pageSize">Size of the page</param>
+        /// <param name="numberOfRecords">Total records count</param>
+        /// <returns>Envelope containing data</returns>
+        private Envelope<IEnumerable<T>> GetEnvelope<T>(List<T> records, int page, int pageSize, int numberOfRecords) where T : class
+        {
+            var numberOfPages = GetPagingCount(numberOfRecords, pageSize);
+            var pager = new Pager
+            {
+                NumberOfPages = numberOfPages,
+                CurrentPage = page,
+                TotalRecords = numberOfRecords,
+                PageSize = pageSize
+            };
+
+            return new Envelope<IEnumerable<T>>
+            {
+                Data = records,
+                Meta = new Meta
+                {
+                    Links = GetPagination(pager),
+                    Count = records.Count()
+                }
+            };
         }
 
         /// <summary>

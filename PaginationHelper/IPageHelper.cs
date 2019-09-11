@@ -30,5 +30,12 @@ namespace PaginationHelper
         Task<Envelope<IEnumerable<TTarget>>> GetProjectedPageAsync<TSource, TTarget>(IQueryable<TSource> items, PaginationDto paginationDto)
             where TSource : class
             where TTarget : class;
+
+        /// <summary>
+        /// Generates pagination links
+        /// </summary>
+        /// <param name="pager">The pagination page stats data</param>
+        /// <returns>Pagination data</returns>
+        Pagination GetPagination(Pager pager);
     }
 }
