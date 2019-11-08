@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PaginationHelper
@@ -15,8 +16,12 @@ namespace PaginationHelper
         /// <typeparam name="T">Type of data</typeparam>
         /// <param name="items">The IQueryable of the dataSource</param>
         /// <param name="paginationDto">Number of the page and page size</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The current page of the data</returns>
-        Task<Envelope<IEnumerable<T>>> GetPageAsync<T>(IQueryable<T> items, PaginationDto paginationDto) where T : class;
+        Task<Envelope<IEnumerable<T>>> GetPageAsync<T>(
+            IQueryable<T> items,
+            PaginationDto paginationDto,
+            CancellationToken cancellationToken = default) where T : class;
 
         /// <summary>
         /// Projects <paramref name="items"/> into the specified type and
@@ -26,8 +31,12 @@ namespace PaginationHelper
         /// <typeparam name="TTarget">Type of the data after projection</typeparam>
         /// <param name="items">The IQueryable of the dataSource</param>
         /// <param name="paginationDto">Number of the page and page size</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The current page of the data</returns>
-        Task<Envelope<IEnumerable<TTarget>>> GetProjectedPageAsync<TSource, TTarget>(IQueryable<TSource> items, PaginationDto paginationDto)
+        Task<Envelope<IEnumerable<TTarget>>> GetProjectedPageAsync<TSource, TTarget>(
+            IQueryable<TSource> items,
+            PaginationDto paginationDto,
+            CancellationToken cancellationToken = default)
             where TSource : class
             where TTarget : class;
 

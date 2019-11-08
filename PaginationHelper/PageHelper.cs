@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PaginationHelper
@@ -41,44 +42,57 @@ namespace PaginationHelper
         #region Implementation of IPageHelper
 
         /// <inheritdoc />
-        public async Task<Envelope<IEnumerable<T>>> GetPageAsync<T>(IQueryable<T> items, PaginationDto paginationDto) where T : class
+        public async Task<Envelope<IEnumerable<T>>> GetPageAsync<T>(
+            IQueryable<T> items, 
+            PaginationDto paginationDto,
+            CancellationToken cancellationToken = default) where T : class
         {
-            if (paginationDto == null)
-            {
-                throw new ArgumentNullException(nameof(paginationDto));
-            }
-            paginationDto.PageSize = paginationDto.PageSize ?? _pageConfig.PageSize;
+            var pagination = paginationDto ?? throw new ArgumentNullException(nameof(paginationDto));
+            pagination.PageSize = pagination.PageSize ?? _pageConfig.PageSize;
 
-            var countFrom = _countFrom(paginationDto.PageSize.Value, paginationDto.Page);
+            var countFrom = _countFrom(pagination.PageSize.Value, pagination.Page);
+
             var records = await items
                 .Skip(countFrom)
-                .Take(paginationDto.PageSize.Value)
-                .ToListAsync();
+                .Take(pagination.PageSize.Value)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
 
-            var numberOfRecords = await items.CountAsync();
-            return GetEnvelope(records, paginationDto.Page, paginationDto.PageSize.Value, numberOfRecords);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var numberOfRecords = await items.CountAsync(cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return GetEnvelope(records, pagination.Page, pagination.PageSize.Value, numberOfRecords);
         }
 
         /// <inheritdoc />
-        public async Task<Envelope<IEnumerable<TTarget>>> GetProjectedPageAsync<TSource, TTarget>(IQueryable<TSource> items, PaginationDto paginationDto)
+        public async Task<Envelope<IEnumerable<TTarget>>> GetProjectedPageAsync<TSource, TTarget>(
+            IQueryable<TSource> items,
+            PaginationDto paginationDto,
+            CancellationToken cancellationToken = default)
             where TSource : class
             where TTarget : class
         {
-            if (paginationDto == null)
-            {
-                throw new ArgumentNullException(nameof(paginationDto));
-            }
-            paginationDto.PageSize = paginationDto.PageSize ?? _pageConfig.PageSize;
+            var pagination = paginationDto ?? throw new ArgumentNullException(nameof(paginationDto));
+            pagination.PageSize = pagination.PageSize ?? _pageConfig.PageSize;
 
-            var countFrom = _countFrom(paginationDto.PageSize.Value, paginationDto.Page);
+            var countFrom = _countFrom(pagination.PageSize.Value, pagination.Page);
             var records = await items
                 .Skip(countFrom)
-                .Take(paginationDto.PageSize.Value)
+                .Take(pagination.PageSize.Value)
+                .AsNoTracking()
                 .ProjectTo<TTarget>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
-            var numberOfRecords = await items.CountAsync();
-            return GetEnvelope(records, paginationDto.Page, paginationDto.PageSize.Value, numberOfRecords);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var numberOfRecords = await items.CountAsync(cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return GetEnvelope(records, pagination.Page, pagination.PageSize.Value, numberOfRecords);
         }
 
         /// <inheritdoc />
