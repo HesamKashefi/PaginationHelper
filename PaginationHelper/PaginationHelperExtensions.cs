@@ -11,11 +11,11 @@ namespace PaginationHelper
         /// Adds services for PageHelper
         /// </summary>
         /// <param name="services">Service Collection</param>
-        /// <param name="defaultPageSize">Default page size</param>
+        /// <param name="pageConfig">Default configuration for pagination</param>
         /// <returns>Service Collection</returns>
-        public static IServiceCollection AddPaginationHelper(this IServiceCollection services, int defaultPageSize = 200)
+        public static IServiceCollection AddPaginationHelper(this IServiceCollection services, IPageConfig pageConfig)
         {
-            services.AddSingleton<IPageConfig, PageConfig>(provider => new PageConfig(defaultPageSize));
+            services.AddSingleton(pageConfig);
             services.TryAddScoped<IPageHelper, PageHelper>();
 
             services.AddHttpContextAccessor();

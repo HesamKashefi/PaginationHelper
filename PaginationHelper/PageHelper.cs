@@ -100,14 +100,14 @@ namespace PaginationHelper
         {
             var routeName = _urlHelper.ActionContext.ActionDescriptor.AttributeRouteInfo.Name;
             var routeValues = _urlHelper.ActionContext.ActionDescriptor.RouteValues;
-
-            routeValues["pageSize"] = pager.PageSize.ToString();
+            
+            routeValues[_pageConfig.PageSizeParameterName] = pager.PageSize.ToString();
 
             var pagination = new Pagination
             {
                 Self = _urlHelper.Link(routeName, new RouteValueDictionary(routeValues)
                 {
-                    ["page"] = pager.CurrentPage
+                    [_pageConfig.PageParameterName] = pager.CurrentPage
                 }),
                 Pager = pager
             };
@@ -116,7 +116,7 @@ namespace PaginationHelper
             {
                 pagination.NextPage = _urlHelper.Link(routeName, new RouteValueDictionary(routeValues)
                 {
-                    ["page"] = pager.CurrentPage + 1
+                    [_pageConfig.PageParameterName] = pager.CurrentPage + 1
                 });
             }
 
@@ -124,7 +124,7 @@ namespace PaginationHelper
             {
                 pagination.PrevPage = _urlHelper.Link(routeName, new RouteValueDictionary(routeValues)
                 {
-                    ["page"] = pager.CurrentPage - 1
+                    [_pageConfig.PageParameterName] = pager.CurrentPage - 1
                 });
             }
 
@@ -132,12 +132,12 @@ namespace PaginationHelper
             {
                 pagination.FirstPage = _urlHelper.Link(routeName, new RouteValueDictionary(routeValues)
                 {
-                    ["page"] = 1
+                    [_pageConfig.PageParameterName] = 1
                 });
 
                 pagination.LastPage = _urlHelper.Link(routeName, new RouteValueDictionary(routeValues)
                 {
-                    ["page"] = pager.NumberOfPages
+                    [_pageConfig.PageParameterName] = pager.NumberOfPages
                 });
             }
 

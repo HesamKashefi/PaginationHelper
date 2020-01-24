@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard1.4</TargetFramework>
     <Authors>Hesam Kashefi</Authors>
-    <Description>PaginationHelper makes the pagination of your data easy and awesome in .net APIs!</Description>
+    <RootNamespace>PaginationHelper</RootNamespace>
+    <Description>PaginationHelper.Core provides PaginationHelper types that can be shared between servers and clients!</Description>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/HesamKashefi/PaginationHelper</PackageProjectUrl>
     <RepositoryUrl>https://github.com/HesamKashefi/PaginationHelper.git</RepositoryUrl>
@@ -14,20 +15,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\LICENSE.txt">
-      <Pack>True</Pack>
+    <None Include="..\LICENSE.txt" Link="LICENSE.txt">
       <PackagePath></PackagePath>
+      <Pack>True</Pack>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PaginationHelper.Core\PaginationHelper.Core.csproj" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
 
 </Project>
