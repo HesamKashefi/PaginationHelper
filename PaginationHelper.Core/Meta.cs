@@ -6,7 +6,7 @@
     public class Meta
     {
         /// <summary>
-        /// The <see cref="System.Net.HttpStatusCode"/> of the response
+        /// The status code of the response
         /// </summary>
         public short Status { get; set; }
 

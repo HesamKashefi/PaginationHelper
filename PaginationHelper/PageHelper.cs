@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,8 +41,8 @@ namespace PaginationHelper
         #region Implementation of IPageHelper
 
         /// <inheritdoc />
-        public async Task<Envelope<IEnumerable<T>>> GetPageAsync<T>(
-            IQueryable<T> items, 
+        public async Task<Envelope<T[]>> GetPageAsync<T>(
+            IQueryable<T> items,
             PaginationDto paginationDto,
             CancellationToken cancellationToken = default) where T : class
         {
@@ -56,19 +55,15 @@ namespace PaginationHelper
                 .Skip(countFrom)
                 .Take(pagination.PageSize.Value)
                 .AsNoTracking()
-                .ToListAsync(cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
+                .ToArrayAsync(cancellationToken);
 
             var numberOfRecords = await items.CountAsync(cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
 
             return GetEnvelope(records, pagination.Page, pagination.PageSize.Value, numberOfRecords);
         }
 
         /// <inheritdoc />
-        public async Task<Envelope<IEnumerable<TTarget>>> GetProjectedPageAsync<TSource, TTarget>(
+        public async Task<Envelope<TTarget[]>> GetProjectedPageAsync<TSource, TTarget>(
             IQueryable<TSource> items,
             PaginationDto paginationDto,
             CancellationToken cancellationToken = default)
@@ -84,13 +79,9 @@ namespace PaginationHelper
                 .Take(pagination.PageSize.Value)
                 .AsNoTracking()
                 .ProjectTo<TTarget>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
+                .ToArrayAsync(cancellationToken);
 
             var numberOfRecords = await items.CountAsync(cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
 
             return GetEnvelope(records, pagination.Page, pagination.PageSize.Value, numberOfRecords);
         }
@@ -100,7 +91,7 @@ namespace PaginationHelper
         {
             var routeName = _urlHelper.ActionContext.ActionDescriptor.AttributeRouteInfo.Name;
             var routeValues = _urlHelper.ActionContext.ActionDescriptor.RouteValues;
-            
+
             routeValues[_pageConfig.PageSizeParameterName] = pager.PageSize.ToString();
 
             var pagination = new Pagination
@@ -157,7 +148,7 @@ namespace PaginationHelper
         /// <param name="pageSize">Size of the page</param>
         /// <param name="numberOfRecords">Total records count</param>
         /// <returns>Envelope containing data</returns>
-        private Envelope<IEnumerable<T>> GetEnvelope<T>(List<T> records, int page, int pageSize, int numberOfRecords) where T : class
+        private Envelope<T[]> GetEnvelope<T>(T[] records, int page, int pageSize, int numberOfRecords) where T : class
         {
             var numberOfPages = GetPagingCount(numberOfRecords, pageSize);
             var pager = new Pager
@@ -168,7 +159,7 @@ namespace PaginationHelper
                 PageSize = pageSize
             };
 
-            return new Envelope<IEnumerable<T>>
+            return new Envelope<T[]>
             {
                 Data = records,
                 Meta = new Meta

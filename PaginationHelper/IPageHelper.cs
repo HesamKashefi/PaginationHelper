@@ -18,7 +18,7 @@ namespace PaginationHelper
         /// <param name="paginationDto">Number of the page and page size</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The current page of the data</returns>
-        Task<Envelope<IEnumerable<T>>> GetPageAsync<T>(
+        Task<Envelope<T[]>> GetPageAsync<T>(
             IQueryable<T> items,
             PaginationDto paginationDto,
             CancellationToken cancellationToken = default) where T : class;
@@ -33,7 +33,7 @@ namespace PaginationHelper
         /// <param name="paginationDto">Number of the page and page size</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The current page of the data</returns>
-        Task<Envelope<IEnumerable<TTarget>>> GetProjectedPageAsync<TSource, TTarget>(
+        Task<Envelope<TTarget[]>> GetProjectedPageAsync<TSource, TTarget>(
             IQueryable<TSource> items,
             PaginationDto paginationDto,
             CancellationToken cancellationToken = default)

@@ -26,7 +26,7 @@ namespace PaginationHelper
         /// <summary>
         /// Size of the page
         /// </summary>
-        [Range(1, 200)]
+        [Range(1, int.MaxValue)]
         public int? PageSize { get; set; } = 20;
     }
 }
