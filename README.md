@@ -3,6 +3,10 @@
 PaginationHelper makes the pagination of your data easy and awesome in .net APIs!
 But how?
 
+## Build Status
+
+[![build](https://github.com/HesamKashefi/PaginationHelper/actions/workflows/build.yml/badge.svg)](https://github.com/HesamKashefi/PaginationHelper/actions/workflows/build.yml)
+
 ## Installation
 
 With dotnet cli
