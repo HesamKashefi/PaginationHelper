@@ -11,7 +11,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>asp-net-core Pagination Helper</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.4.0</Version>
+    <Version>1.5.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
