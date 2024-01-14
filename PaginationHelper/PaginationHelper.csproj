@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <TargetFramework>net8.0</TargetFramework>
     <Authors>Hesam Kashefi</Authors>
     <Description>PaginationHelper makes the pagination of your data easy and awesome in .net APIs!</Description>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
