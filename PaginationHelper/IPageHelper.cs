@@ -24,6 +24,17 @@ namespace PaginationHelper
             CancellationToken cancellationToken = default) where T : class;
 
         /// <summary>
+        /// Returns the data of the specified page
+        /// </summary>
+        /// <typeparam name="T">Type of data</typeparam>
+        /// <param name="items">The IEnumerable of the dataSource</param>
+        /// <param name="paginationDto">Number of the page and page size</param>
+        /// <returns>The current page of the data</returns>
+        Envelope<T[]> GetPage<T>(
+            IEnumerable<T> items,
+            PaginationDto paginationDto) where T : class;
+
+        /// <summary>
         /// Projects <paramref name="items"/> into the specified type and
         /// Returns the data of the specified page
         /// </summary>
@@ -37,6 +48,21 @@ namespace PaginationHelper
             IQueryable<TSource> items,
             PaginationDto paginationDto,
             CancellationToken cancellationToken = default)
+            where TSource : class
+            where TTarget : class;
+
+        /// <summary>
+        /// Projects <paramref name="items"/> into the specified type and
+        /// Returns the data of the specified page
+        /// </summary>
+        /// <typeparam name="TSource">Type of the source data</typeparam>
+        /// <typeparam name="TTarget">Type of the data after projection</typeparam>
+        /// <param name="items">The IEnumerable of the dataSource</param>
+        /// <param name="paginationDto">Number of the page and page size</param>
+        /// <returns>The current page of the data</returns>
+        Envelope<TTarget[]> GetProjectedPage<TSource, TTarget>(
+            IEnumerable<TSource> items,
+            PaginationDto paginationDto)
             where TSource : class
             where TTarget : class;
 

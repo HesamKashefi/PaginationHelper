@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -62,6 +63,23 @@ namespace PaginationHelper
             return GetEnvelope(records, pagination.Page, pagination.PageSize.Value, numberOfRecords);
         }
 
+        public Envelope<T[]> GetPage<T>(IEnumerable<T> items, PaginationDto paginationDto) where T : class
+        {
+            var pagination = paginationDto ?? throw new ArgumentNullException(nameof(paginationDto));
+            pagination.PageSize = pagination.PageSize ?? _pageConfig.PageSize;
+
+            var countFrom = _countFrom(pagination.PageSize.Value, pagination.Page);
+
+            var records = items
+                .Skip(countFrom)
+                .Take(pagination.PageSize.Value)
+                .ToArray();
+
+            var numberOfRecords = items.Count();
+
+            return GetEnvelope(records, pagination.Page, pagination.PageSize.Value, numberOfRecords);
+        }
+
         /// <inheritdoc />
         public async Task<Envelope<TTarget[]>> GetProjectedPageAsync<TSource, TTarget>(
             IQueryable<TSource> items,
@@ -84,6 +102,26 @@ namespace PaginationHelper
             var numberOfRecords = await items.CountAsync(cancellationToken);
 
             return GetEnvelope(records, pagination.Page, pagination.PageSize.Value, numberOfRecords);
+        }
+
+        public Envelope<TTarget[]> GetProjectedPage<TSource, TTarget>(IEnumerable<TSource> items, PaginationDto paginationDto)
+            where TSource : class
+            where TTarget : class
+        {
+            var pagination = paginationDto ?? throw new ArgumentNullException(nameof(paginationDto));
+            pagination.PageSize = pagination.PageSize ?? _pageConfig.PageSize;
+
+            var countFrom = _countFrom(pagination.PageSize.Value, pagination.Page);
+            var records = items
+                .Skip(countFrom)
+                .Take(pagination.PageSize.Value)
+                .ToArray();
+
+            var mappedRecords = _mapper.Map<TTarget[]>(records);
+
+            var numberOfRecords = items.Count();
+
+            return GetEnvelope(mappedRecords, pagination.Page, pagination.PageSize.Value, numberOfRecords);
         }
 
         /// <inheritdoc />
