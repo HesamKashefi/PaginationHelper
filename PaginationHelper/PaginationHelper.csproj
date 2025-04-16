@@ -1,33 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <Authors>Hesam Kashefi</Authors>
-    <Description>PaginationHelper makes the pagination of your data easy and awesome in .net APIs!</Description>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/HesamKashefi/PaginationHelper</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/HesamKashefi/PaginationHelper.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>asp-net-core Pagination Helper</PackageTags>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.6.0</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Authors>Hesam Kashefi</Authors>
+		<Description>PaginationHelper makes the pagination of your data easy and awesome in .net APIs!</Description>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<PackageProjectUrl>https://github.com/HesamKashefi/PaginationHelper</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/HesamKashefi/PaginationHelper.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>asp-net-core Pagination Helper</PackageTags>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Version>1.6.1</Version>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="14.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
-  </ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\LICENSE.txt">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="14.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PaginationHelper.Core\PaginationHelper.Core.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\LICENSE.txt">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\PaginationHelper.Core\PaginationHelper.Core.csproj" />
+	</ItemGroup>
 
 </Project>
